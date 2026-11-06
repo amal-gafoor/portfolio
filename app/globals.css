@@ -1,0 +1,262 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #f7f7f7;
+  --fg: #0a0a0a;
+  --muted: #5b5b61;
+  --glass: rgba(0, 0, 0, 0.04);
+  --glass-strong: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-border-hover: rgba(0, 0, 0, 0.28);
+  --glow: rgba(0, 0, 0, 0.06);
+  --ninja-outline: #ffffff;
+}
+
+.dark {
+  --bg: #0a0a0a;
+  --fg: #fafafa;
+  --muted: #a1a1aa;
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-strong: rgba(10, 10, 10, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-hover: rgba(255, 255, 255, 0.3);
+  --glow: rgba(255, 255, 255, 0.08);
+  --ninja-outline: #d4d4d8;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius-card: 20px;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---------- glass primitive ---------- */
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 10px 40px -20px rgba(0, 0, 0, 0.5);
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+@media (min-width: 768px) {
+  .glass {
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+  }
+}
+.glass-hover:hover {
+  border-color: var(--glass-border-hover);
+  transform: translateY(-2px);
+}
+.glass-strong {
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+}
+
+/* cursor glow on cards (desktop) */
+.spot {
+  position: relative;
+  overflow: hidden;
+}
+.spot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    360px circle at var(--mx, 50%) var(--my, 50%),
+    var(--glow),
+    transparent 45%
+  );
+}
+.spot:hover::before {
+  opacity: 1;
+}
+
+/* ---------- background ---------- */
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 500px at 10% -10%, var(--glow), transparent 60%),
+    radial-gradient(700px 400px at 90% 110%, var(--glow), transparent 60%);
+}
+.bg-grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- theme switch: circular reveal (View Transitions) ---------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+  animation: theme-reveal 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0px at var(--tx, 50%) var(--ty, 50%));
+  }
+  to {
+    clip-path: circle(160vmax at var(--tx, 50%) var(--ty, 50%));
+  }
+}
+/* fallback when no view transitions: soft colour fade */
+.theme-fade,
+.theme-fade * {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease,
+    border-color 0.5s ease !important;
+}
+
+/* ---------- ninja mascot ---------- */
+.ninja-orbit {
+  position: absolute;
+  inset: 0;
+  animation: orbit 16s linear infinite;
+  pointer-events: none;
+}
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ninja {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 44px;
+  height: 52px;
+  transform: translate(-50%, -100%);
+  transform-origin: 50% 100%;
+  animation: bob 0.5s ease-in-out infinite;
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translate(-50%, -100%) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -100%) translateY(-1.5px);
+  }
+}
+.ninja .leg-l {
+  transform-origin: 13px 27px;
+  animation: step-l 0.5s ease-in-out infinite;
+}
+.ninja .leg-r {
+  transform-origin: 21px 27px;
+  animation: step-r 0.5s ease-in-out infinite;
+}
+@keyframes step-l {
+  0%,
+  100% {
+    transform: rotate(25deg);
+  }
+  50% {
+    transform: rotate(-25deg);
+  }
+}
+@keyframes step-r {
+  0%,
+  100% {
+    transform: rotate(-25deg);
+  }
+  50% {
+    transform: rotate(25deg);
+  }
+}
+.ninja .arm {
+  transform-origin: 17px 17px;
+  animation: swing 0.5s ease-in-out infinite;
+}
+@keyframes swing {
+  0%,
+  100% {
+    transform: rotate(-18deg);
+  }
+  50% {
+    transform: rotate(18deg);
+  }
+}
+.ninja .band {
+  transform-origin: 9px 9px;
+  animation: flutter 0.35s ease-in-out infinite alternate;
+}
+@keyframes flutter {
+  from {
+    transform: rotate(-8deg) scaleX(1);
+  }
+  to {
+    transform: rotate(6deg) scaleX(0.85);
+  }
+}
+
+@media (min-width: 768px) {
+  .ninja {
+    width: 54px;
+    height: 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ninja-orbit,
+  .ninja,
+  .ninja * {
+    animation: none !important;
+  }
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* ---------- misc ---------- */
+::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
