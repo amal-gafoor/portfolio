@@ -9,7 +9,7 @@ export function Contact() {
   return (
     <section id="contact" className="mx-auto max-w-[1100px] px-5 pb-32 pt-20 md:px-8 md:pb-20 md:pt-28">
       <Reveal>
-        <Card className="spot">
+        <Card className="py-0">
           <CardContent className="flex flex-col items-start gap-6 p-8 md:flex-row md:items-center md:justify-between md:p-12">
             <div>
               <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">Contact</p>
@@ -21,17 +21,17 @@ export function Contact() {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <Button asChild>
+              <Button asChild size="lg">
                 <a href={`mailto:${site.email}`}>
                   <Mail size={16} /> Say hello
                 </a>
               </Button>
-              <Button asChild variant="glass" size="icon">
+              <Button asChild variant="outline" size="icon-lg">
                 <a aria-label="GitHub" href={site.links.github} target="_blank" rel="noreferrer">
                   <GithubIcon size={18} />
                 </a>
               </Button>
-              <Button asChild variant="glass" size="icon">
+              <Button asChild variant="outline" size="icon-lg">
                 <a aria-label="LinkedIn" href={site.links.linkedin} target="_blank" rel="noreferrer">
                   <LinkedinIcon size={18} />
                 </a>

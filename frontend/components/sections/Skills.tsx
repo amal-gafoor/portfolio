@@ -1,9 +1,8 @@
 import { skills } from "@/content/site";
 import { Badge } from "@/components/ui/badge";
-import { CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export function Skills() {
   return (
@@ -14,16 +13,20 @@ export function Skills() {
       <div className="grid gap-4 sm:grid-cols-2">
         {skills.map((g, i) => (
           <Reveal key={g.group} delay={i * 0.05}>
-            <SpotlightCard>
-              <CardContent>
-                <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{g.group}</p>
-                <div className="flex flex-wrap gap-2">
-                  {g.items.map((s) => (
-                    <Badge key={s}>{s}</Badge>
-                  ))}
-                </div>
+            <Card className="h-full gap-4">
+              <CardHeader>
+                <CardTitle className="font-mono text-[11px] font-normal uppercase tracking-[0.18em] text-muted-foreground">
+                  {g.group}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {g.items.map((s) => (
+                  <Badge key={s} variant="secondary">
+                    {s}
+                  </Badge>
+                ))}
               </CardContent>
-            </SpotlightCard>
+            </Card>
           </Reveal>
         ))}
       </div>

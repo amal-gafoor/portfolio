@@ -31,13 +31,13 @@ export function Navbar() {
     <>
       {/* laptop: floating pill */}
       <header className="fixed inset-x-0 top-5 z-50 hidden justify-center md:flex">
-        <nav className="glass-strong flex items-center gap-1 rounded-full p-1.5 pl-4">
+        <nav className="flex items-center gap-1 rounded-full border bg-background p-1.5 pl-4 shadow-sm">
           <a href="#home" className="mr-3 font-mono text-sm font-semibold tracking-tight">
             {site.shortName.toLowerCase()}
             <span className="text-muted-foreground">.dev</span>
           </a>
           {nav.map((n) => (
-            <Button key={n.href} asChild size="nav" variant={active === n.href ? "default" : "ghost"} className="font-normal">
+            <Button key={n.href} asChild size="sm" variant={active === n.href ? "default" : "ghost"} className="rounded-full text-sm font-normal">
               <a href={n.href}>{n.label}</a>
             </Button>
           ))}
@@ -45,16 +45,16 @@ export function Navbar() {
         </nav>
       </header>
 
-      {/* mobile: top-right theme toggle + bottom glass bar */}
+      {/* mobile: top-right theme toggle + bottom bar */}
       <div className="fixed right-4 top-4 z-50 md:hidden">
         <ThemeToggle />
       </div>
       <nav className="safe-bottom fixed inset-x-4 bottom-4 z-50 md:hidden">
-        <div className="glass-strong flex items-center justify-around rounded-full px-2 py-2">
+        <div className="flex items-center justify-around rounded-full border bg-background px-2 py-2 shadow-sm">
           {nav.map((n, i) => {
             const Icon = icons[i];
             return (
-              <Button key={n.href} asChild size="icon" variant={active === n.href ? "default" : "ghost"}>
+              <Button key={n.href} asChild size="icon-lg" variant={active === n.href ? "default" : "ghost"} className="rounded-full">
                 <a href={n.href} aria-label={n.label}>
                   <Icon size={19} />
                 </a>

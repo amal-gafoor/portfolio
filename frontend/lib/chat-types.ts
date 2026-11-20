@@ -18,7 +18,7 @@ export type Stats = {
   model: string;
 };
 
-/** One line of the NDJSON stream sent by /api/chat */
+/** One line of the NDJSON stream sent by the backend's POST /chat */
 export type StreamEvent =
   | { type: "step"; tool: string; input: string; output: string }
   | { type: "sources"; items: Source[] }

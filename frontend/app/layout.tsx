@@ -32,9 +32,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
       className={`${GeistSans.variable} ${GeistMono.variable} h-full`}
     >
-      <body className="bg-grain min-h-full">
+      <body className="min-h-full">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <div className="bg-glow" />
           {children}
         </ThemeProvider>
       </body>

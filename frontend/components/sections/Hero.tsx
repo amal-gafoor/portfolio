@@ -26,18 +26,15 @@ export function Hero() {
         {/* photo */}
         <Reveal delay={0.05} className="order-1 flex justify-start md:order-2 md:justify-end md:pt-3">
           <div className="relative h-[132px] w-[132px] md:h-[340px] md:w-[340px]">
-            <div className="absolute inset-[-10%] rounded-[36px] bg-[var(--glow)] blur-3xl" />
-            <div className="glass absolute inset-0 rounded-[28px] p-1.5 md:rounded-[36px] md:p-2">
-              <Image
-                src="/avatar.png"
-                alt={site.name}
-                width={512}
-                height={512}
-                priority
-                sizes="(max-width: 768px) 132px, 340px"
-                className="h-full w-full rounded-[22px] object-cover grayscale transition duration-700 hover:grayscale-0 md:rounded-[28px]"
-              />
-            </div>
+            <Image
+              src="/avatar.png"
+              alt={site.name}
+              width={512}
+              height={512}
+              priority
+              sizes="(max-width: 768px) 132px, 340px"
+              className="h-full w-full rounded-2xl border object-cover md:rounded-3xl"
+            />
           </div>
         </Reveal>
       </div>

@@ -24,7 +24,7 @@ export function Experience() {
           </Reveal>
           <Reveal delay={0.1}>
             <Card>
-              <CardContent className="md:p-8">
+              <CardContent className="md:px-8">
                 <ol className="relative border-l border-border pl-6">
                   {experience.map((x) => (
                     <li key={x.title + x.org} className="mb-8 last:mb-0">

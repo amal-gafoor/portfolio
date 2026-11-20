@@ -1,4 +1,5 @@
-// All site copy lives here. Edit text, not components.
+// Copy for the static sections of the site. Edit text, not components.
+// The chat agent reads its own copy of this data from backend/data/profile.json — keep the two in sync.
 
 export const site = {
   name: "Amal Gafoor P K",
@@ -12,7 +13,6 @@ export const site = {
     "I build things that actually work in production — RAG pipelines, agentic AI systems, async backends. What excites me is the gap between \"AI demos\" and \"AI that doesn't break under load\": session management, rate limiting, retrieval quality, and the boring infrastructure that makes AI reliable.",
   ],
   email: "amalabdulgafoor9557@gmail.com",
-  phone: "", // add your number here and the chat agent will share it when asked
   location: "Kerala, India",
   links: {
     github: "https://github.com/amal-gafoor",

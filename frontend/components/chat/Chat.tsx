@@ -35,6 +35,9 @@ const SUGGESTIONS = [
   "Switch to light mode",
 ];
 
+/** The Python backend that runs the agent (see /backend). */
+const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/\/$/, "");
+
 const MIN_H = 56;
 const MAX_H = 180;
 
@@ -97,14 +100,14 @@ export function Chat() {
     setBusy(true);
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch(`${API_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: history }),
       });
       if (!res.ok || !res.body) {
         const body = await res.json().catch(() => null);
-        throw new Error(body?.error ?? "Something went wrong. Please try again.");
+        throw new Error(typeof body?.detail === "string" ? body.detail : "Something went wrong. Please try again.");
       }
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -130,7 +133,15 @@ export function Chat() {
         }
       }
     } catch (err) {
-      patch(id, (t) => ({ ...t, error: err instanceof Error ? err.message : "Something went wrong." }));
+      const offline = err instanceof TypeError; // fetch could not reach the backend
+      patch(id, (t) => ({
+        ...t,
+        error: offline
+          ? "Can't reach the agent backend right now. Please try again in a moment."
+          : err instanceof Error
+            ? err.message
+            : "Something went wrong.",
+      }));
     } finally {
       patch(id, (t) => ({ ...t, done: true }));
       setBusy(false);
@@ -139,9 +150,9 @@ export function Chat() {
 
   return (
     <div className="w-full">
-      <Card>
+      <Card className="gap-0 overflow-hidden py-0">
         {turns.length > 0 && (
-          <div ref={scrollRef} className="max-h-[36svh] overflow-y-auto border-b border-border md:max-h-[46svh]">
+          <div ref={scrollRef} className="max-h-[36svh] overflow-y-auto border-b md:max-h-[46svh]">
             <div ref={innerRef} className="space-y-6 p-4 md:p-5">
               {turns.map((t) => (
                 <TurnView key={t.id} turn={t} />
@@ -167,7 +178,7 @@ export function Chat() {
           }}
           placeholder="Ask about my work, or paste a job description…"
           aria-label="Ask the portfolio agent"
-          className="resize-none rounded-none border-0 px-4 py-4 text-[15px] text-foreground focus-visible:ring-0 md:text-[15px]"
+          className="resize-none rounded-none border-0 px-4 py-4 text-[15px] shadow-none focus-visible:ring-0 md:text-[15px]"
           style={{ height: MIN_H }}
         />
         <div className="flex items-center justify-between px-3 pb-3">
@@ -179,7 +190,7 @@ export function Chat() {
             onClick={() => ask(value)}
             disabled={!value.trim() || busy}
             aria-label="Send"
-            className="disabled:opacity-100"
+            className="rounded-full"
           >
             <ArrowUp size={16} />
           </Button>
@@ -188,7 +199,7 @@ export function Chat() {
 
       <div className="mt-3 flex flex-wrap gap-2">
         {SUGGESTIONS.map((s) => (
-          <Button key={s} type="button" variant="glass" size="sm" onClick={() => ask(s)} disabled={busy} className="font-normal text-muted-foreground hover:text-foreground">
+          <Button key={s} type="button" variant="outline" size="sm" onClick={() => ask(s)} disabled={busy} className="rounded-full font-normal text-muted-foreground">
             {s}
           </Button>
         ))}
@@ -206,7 +217,7 @@ function TurnView({ turn }: { turn: Turn }) {
   return (
     <div className="space-y-3">
       <div className="flex justify-end">
-        <p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-sm text-primary-foreground">
+        <p className="max-w-[85%] whitespace-pre-wrap rounded-lg bg-primary px-3.5 py-2 text-sm text-primary-foreground">
           {turn.question}
         </p>
       </div>
@@ -216,7 +227,7 @@ function TurnView({ turn }: { turn: Turn }) {
         <Collapsible
           open={open}
           onOpenChange={setOpen}
-          className="rounded-xl border border-dashed border-border font-mono text-[11px] text-muted-foreground"
+          className="rounded-lg border border-dashed font-mono text-[11px] text-muted-foreground"
         >
           <CollapsibleTrigger className="flex w-full items-center justify-between px-3 py-2">
             <span className="flex items-center gap-2">
@@ -227,7 +238,7 @@ function TurnView({ turn }: { turn: Turn }) {
           </CollapsibleTrigger>
           {turn.steps.length > 0 && (
             <CollapsibleContent>
-              <ol className="space-y-1.5 border-t border-dashed border-border px-3 py-2">
+              <ol className="space-y-1.5 border-t border-dashed px-3 py-2">
                 {turn.steps.map((s, i) => (
                   <li key={i} className="break-words">
                     <span className="text-foreground">
@@ -278,7 +289,7 @@ function TurnView({ turn }: { turn: Turn }) {
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="font-mono text-[11px] text-muted-foreground">sources</span>
           {turn.sources.map((s) => (
-            <Badge key={s.id} variant="outline">
+            <Badge key={s.id} variant="outline" className="font-mono font-normal text-muted-foreground">
               <FileText size={10} />
               {s.title}
             </Badge>
@@ -300,7 +311,7 @@ function TurnView({ turn }: { turn: Turn }) {
 
 function MiniProject({ p }: { p: Project }) {
   return (
-    <div className="rounded-xl border border-border p-3">
+    <div className="rounded-lg border bg-background p-3">
       <div className="flex items-start justify-between gap-2">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">{p.tag}</p>
@@ -308,14 +319,14 @@ function MiniProject({ p }: { p: Project }) {
         </div>
         <div className="flex shrink-0 gap-1">
           {p.code && (
-            <Button asChild variant="outline" size="icon-xs" className="text-foreground">
+            <Button asChild variant="outline" size="icon-sm" className="size-7">
               <a href={p.code} target="_blank" rel="noreferrer" aria-label={`${p.title} code`}>
                 <GithubIcon size={12} />
               </a>
             </Button>
           )}
           {p.live && (
-            <Button asChild size="icon-xs">
+            <Button asChild size="icon-sm" className="size-7">
               <a href={p.live} target="_blank" rel="noreferrer" aria-label={`${p.title} live`}>
                 <ArrowUpRight size={12} />
               </a>
@@ -331,7 +342,7 @@ function MiniProject({ p }: { p: Project }) {
 
 function Pill({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
   return (
-    <Button asChild variant="glass" size="sm" className="h-auto gap-1.5 px-3 py-1.5 font-normal">
+    <Button asChild variant="outline" size="sm" className="font-normal">
       <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
         {icon}
         {label}

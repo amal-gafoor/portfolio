@@ -2,11 +2,10 @@ import { ArrowUpRight } from "lucide-react";
 import { projects } from "@/content/site";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { GithubIcon } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export function Projects() {
   return (
@@ -17,13 +16,13 @@ export function Projects() {
       <div className="grid gap-4 md:grid-cols-3">
         {projects.map((p, i) => (
           <Reveal key={p.title} delay={(i % 3) * 0.06} className={p.featured ? "md:col-span-2" : ""}>
-            <SpotlightCard className="h-full">
+            <Card className="h-full gap-4">
               <CardHeader>
-                <div className="mb-1.5 flex items-start justify-between gap-3">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{p.tag}</p>
+                <div className="flex items-start justify-between gap-3">
+                  <p className="pt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{p.tag}</p>
                   <div className="flex gap-1.5">
                     {p.code && (
-                      <Button asChild variant="glass" size="icon-sm">
+                      <Button asChild variant="outline" size="icon-sm">
                         <a href={p.code} target="_blank" rel="noreferrer" aria-label={`${p.title} code`}>
                           <GithubIcon size={15} />
                         </a>
@@ -38,17 +37,19 @@ export function Projects() {
                     )}
                   </div>
                 </div>
-                <CardTitle>{p.title}</CardTitle>
+                <CardTitle className="text-xl leading-tight tracking-tight">{p.title}</CardTitle>
               </CardHeader>
-              <CardContent className="flex-1 pb-5 pt-2">
-                <CardDescription>{p.blurb}</CardDescription>
+              <CardContent className="flex-1">
+                <CardDescription className="leading-relaxed">{p.blurb}</CardDescription>
               </CardContent>
               <CardFooter className="flex-wrap gap-1.5">
                 {p.stack.map((s) => (
-                  <Badge key={s}>{s}</Badge>
+                  <Badge key={s} variant="secondary">
+                    {s}
+                  </Badge>
                 ))}
               </CardFooter>
-            </SpotlightCard>
+            </Card>
           </Reveal>
         ))}
       </div>
