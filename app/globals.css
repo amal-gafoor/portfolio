@@ -3,33 +3,82 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --bg: #f7f7f7;
-  --fg: #0a0a0a;
-  --muted: #5b5b61;
+  /* shadcn tokens */
+  --radius: 1.25rem;
+  --background: #f7f7f7;
+  --foreground: #0a0a0a;
+  --card: transparent;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #0a0a0a;
+  --primary-foreground: #f7f7f7;
+  --secondary: rgba(0, 0, 0, 0.04);
+  --secondary-foreground: #0a0a0a;
+  --muted: rgba(0, 0, 0, 0.04);
+  --muted-foreground: #5b5b61;
+  --accent: rgba(0, 0, 0, 0.06);
+  --accent-foreground: #0a0a0a;
+  --destructive: #dc2626;
+  --border: rgba(0, 0, 0, 0.1);
+  --input: rgba(0, 0, 0, 0.1);
+  --ring: #0a0a0a;
+  /* glass */
   --glass: rgba(0, 0, 0, 0.04);
   --glass-strong: rgba(255, 255, 255, 0.55);
   --glass-border: rgba(0, 0, 0, 0.1);
   --glass-border-hover: rgba(0, 0, 0, 0.28);
   --glow: rgba(0, 0, 0, 0.06);
-  --ninja-outline: #ffffff;
 }
 
 .dark {
-  --bg: #0a0a0a;
-  --fg: #fafafa;
-  --muted: #a1a1aa;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: transparent;
+  --card-foreground: #fafafa;
+  --popover: #111111;
+  --popover-foreground: #fafafa;
+  --primary: #fafafa;
+  --primary-foreground: #0a0a0a;
+  --secondary: rgba(255, 255, 255, 0.05);
+  --secondary-foreground: #fafafa;
+  --muted: rgba(255, 255, 255, 0.05);
+  --muted-foreground: #a1a1aa;
+  --accent: rgba(255, 255, 255, 0.08);
+  --accent-foreground: #fafafa;
+  --destructive: #f87171;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #fafafa;
   --glass: rgba(255, 255, 255, 0.05);
   --glass-strong: rgba(10, 10, 10, 0.6);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-border-hover: rgba(255, 255, 255, 0.3);
   --glow: rgba(255, 255, 255, 0.08);
-  --ninja-outline: #d4d4d8;
 }
 
 @theme inline {
-  --color-bg: var(--bg);
-  --color-fg: var(--fg);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 8px);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --radius-card: 20px;
@@ -41,8 +90,8 @@ html {
 }
 
 body {
-  background: var(--bg);
-  color: var(--fg);
+  background: var(--background);
+  color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -151,102 +200,7 @@ body {
     border-color 0.5s ease !important;
 }
 
-/* ---------- ninja mascot ---------- */
-.ninja-orbit {
-  position: absolute;
-  inset: 0;
-  animation: orbit 16s linear infinite;
-  pointer-events: none;
-}
-@keyframes orbit {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.ninja {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 44px;
-  height: 52px;
-  transform: translate(-50%, -100%);
-  transform-origin: 50% 100%;
-  animation: bob 0.5s ease-in-out infinite;
-}
-@keyframes bob {
-  0%,
-  100% {
-    transform: translate(-50%, -100%) translateY(0);
-  }
-  50% {
-    transform: translate(-50%, -100%) translateY(-1.5px);
-  }
-}
-.ninja .leg-l {
-  transform-origin: 13px 27px;
-  animation: step-l 0.5s ease-in-out infinite;
-}
-.ninja .leg-r {
-  transform-origin: 21px 27px;
-  animation: step-r 0.5s ease-in-out infinite;
-}
-@keyframes step-l {
-  0%,
-  100% {
-    transform: rotate(25deg);
-  }
-  50% {
-    transform: rotate(-25deg);
-  }
-}
-@keyframes step-r {
-  0%,
-  100% {
-    transform: rotate(-25deg);
-  }
-  50% {
-    transform: rotate(25deg);
-  }
-}
-.ninja .arm {
-  transform-origin: 17px 17px;
-  animation: swing 0.5s ease-in-out infinite;
-}
-@keyframes swing {
-  0%,
-  100% {
-    transform: rotate(-18deg);
-  }
-  50% {
-    transform: rotate(18deg);
-  }
-}
-.ninja .band {
-  transform-origin: 9px 9px;
-  animation: flutter 0.35s ease-in-out infinite alternate;
-}
-@keyframes flutter {
-  from {
-    transform: rotate(-8deg) scaleX(1);
-  }
-  to {
-    transform: rotate(6deg) scaleX(0.85);
-  }
-}
-
-@media (min-width: 768px) {
-  .ninja {
-    width: 54px;
-    height: 64px;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .ninja-orbit,
-  .ninja,
-  .ninja * {
-    animation: none !important;
-  }
   ::view-transition-new(root) {
     animation: none;
   }
@@ -254,8 +208,8 @@ body {
 
 /* ---------- misc ---------- */
 ::selection {
-  background: var(--fg);
-  color: var(--bg);
+  background: var(--foreground);
+  color: var(--background);
 }
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);

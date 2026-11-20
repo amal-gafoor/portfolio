@@ -2,17 +2,20 @@
 
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useSyncExternalStore, type MouseEvent } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type DocWithVT = Document & {
   startViewTransition?: (cb: () => void) => { ready: Promise<void> };
 };
 
-export function ThemeToggle({ className = "" }: { className?: string }) {
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+const noop = () => () => {};
 
+export function ThemeToggle({ className }: { className?: string }) {
+  const { resolvedTheme, setTheme } = useTheme();
+  // false on the server and first paint, true once hydrated
+  const mounted = useSyncExternalStore(noop, () => true, () => false);
   const isDark = resolvedTheme === "dark";
 
   const toggle = (e: MouseEvent<HTMLButtonElement>) => {
@@ -36,30 +39,30 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   };
 
   return (
-    <button
+    <Button
       type="button"
+      variant="glass"
+      size="icon-md"
       aria-label="Toggle theme"
       onClick={toggle}
-      className={`glass glass-hover relative grid h-10 w-10 place-items-center rounded-full ${className}`}
+      className={cn("relative", className)}
     >
       <span className="relative block h-[18px] w-[18px]">
         <Sun
           size={18}
-          className={`absolute inset-0 transition-all duration-500 ${
-            mounted && isDark
-              ? "rotate-0 scale-100 opacity-100"
-              : "-rotate-90 scale-50 opacity-0"
-          }`}
+          className={cn(
+            "absolute inset-0 transition-all duration-500",
+            mounted && isDark ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-50 opacity-0",
+          )}
         />
         <Moon
           size={18}
-          className={`absolute inset-0 transition-all duration-500 ${
-            mounted && !isDark
-              ? "rotate-0 scale-100 opacity-100"
-              : "rotate-90 scale-50 opacity-0"
-          }`}
+          className={cn(
+            "absolute inset-0 transition-all duration-500",
+            mounted && !isDark ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-50 opacity-0",
+          )}
         />
       </span>
-    </button>
+    </Button>
   );
 }

@@ -1,10 +1,12 @@
 import { ArrowUpRight } from "lucide-react";
-import { GithubIcon } from "@/components/ui/Icons";
 import { projects } from "@/content/site";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { GithubIcon } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { Tag } from "@/components/ui/Tag";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export function Projects() {
   return (
@@ -14,53 +16,39 @@ export function Projects() {
       </Reveal>
       <div className="grid gap-4 md:grid-cols-3">
         {projects.map((p, i) => (
-          <Reveal
-            key={p.title}
-            delay={(i % 3) * 0.06}
-            className={p.featured ? "md:col-span-2" : ""}
-          >
-            <GlassCard className="flex h-full flex-col p-6">
-              <div className="mb-3 flex items-start justify-between gap-3">
-                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
-                  {p.tag}
-                </p>
-                <div className="flex gap-1.5">
-                  {p.code && (
-                    <a
-                      href={p.code}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${p.title} code`}
-                      className="glass glass-hover grid h-9 w-9 place-items-center rounded-full"
-                    >
-                      <GithubIcon size={15} />
-                    </a>
-                  )}
-                  {p.live && (
-                    <a
-                      href={p.live}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${p.title} live`}
-                      className="grid h-9 w-9 place-items-center rounded-full bg-fg text-bg"
-                    >
-                      <ArrowUpRight size={15} />
-                    </a>
-                  )}
+          <Reveal key={p.title} delay={(i % 3) * 0.06} className={p.featured ? "md:col-span-2" : ""}>
+            <SpotlightCard className="h-full">
+              <CardHeader>
+                <div className="mb-1.5 flex items-start justify-between gap-3">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{p.tag}</p>
+                  <div className="flex gap-1.5">
+                    {p.code && (
+                      <Button asChild variant="glass" size="icon-sm">
+                        <a href={p.code} target="_blank" rel="noreferrer" aria-label={`${p.title} code`}>
+                          <GithubIcon size={15} />
+                        </a>
+                      </Button>
+                    )}
+                    {p.live && (
+                      <Button asChild size="icon-sm">
+                        <a href={p.live} target="_blank" rel="noreferrer" aria-label={`${p.title} live`}>
+                          <ArrowUpRight size={15} />
+                        </a>
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <h3 className="text-xl font-semibold tracking-tight md:text-2xl">
-                {p.title}
-              </h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted md:text-[15px]">
-                {p.blurb}
-              </p>
-              <div className="mt-5 flex flex-wrap gap-1.5">
+                <CardTitle>{p.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 pb-5 pt-2">
+                <CardDescription>{p.blurb}</CardDescription>
+              </CardContent>
+              <CardFooter className="flex-wrap gap-1.5">
                 {p.stack.map((s) => (
-                  <Tag key={s}>{s}</Tag>
+                  <Badge key={s}>{s}</Badge>
                 ))}
-              </div>
-            </GlassCard>
+              </CardFooter>
+            </SpotlightCard>
           </Reveal>
         ))}
       </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Briefcase, Home, Mail, Sparkles, User } from "lucide-react";
 import { nav, site } from "@/content/site";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
 
 const icons = [Home, Briefcase, User, Sparkles, Mail];
 
@@ -11,7 +12,6 @@ export function Navbar() {
   const [active, setActive] = useState("#home");
 
   useEffect(() => {
-    const ids = nav.map((n) => n.href.slice(1));
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -20,8 +20,8 @@ export function Navbar() {
       },
       { rootMargin: "-40% 0px -55% 0px" },
     );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
+    nav.forEach((n) => {
+      const el = document.getElementById(n.href.slice(1));
       if (el) obs.observe(el);
     });
     return () => obs.disconnect();
@@ -34,20 +34,12 @@ export function Navbar() {
         <nav className="glass-strong flex items-center gap-1 rounded-full p-1.5 pl-4">
           <a href="#home" className="mr-3 font-mono text-sm font-semibold tracking-tight">
             {site.shortName.toLowerCase()}
-            <span className="text-muted">.dev</span>
+            <span className="text-muted-foreground">.dev</span>
           </a>
           {nav.map((n) => (
-            <a
-              key={n.href}
-              href={n.href}
-              className={`rounded-full px-3.5 py-1.5 text-sm transition-colors ${
-                active === n.href
-                  ? "bg-fg text-bg"
-                  : "text-muted hover:text-fg"
-              }`}
-            >
-              {n.label}
-            </a>
+            <Button key={n.href} asChild size="nav" variant={active === n.href ? "default" : "ghost"} className="font-normal">
+              <a href={n.href}>{n.label}</a>
+            </Button>
           ))}
           <ThemeToggle className="ml-1" />
         </nav>
@@ -61,18 +53,12 @@ export function Navbar() {
         <div className="glass-strong flex items-center justify-around rounded-full px-2 py-2">
           {nav.map((n, i) => {
             const Icon = icons[i];
-            const on = active === n.href;
             return (
-              <a
-                key={n.href}
-                href={n.href}
-                aria-label={n.label}
-                className={`grid h-11 w-11 place-items-center rounded-full transition-all ${
-                  on ? "bg-fg text-bg" : "text-muted"
-                }`}
-              >
-                <Icon size={19} />
-              </a>
+              <Button key={n.href} asChild size="icon" variant={active === n.href ? "default" : "ghost"}>
+                <a href={n.href} aria-label={n.label}>
+                  <Icon size={19} />
+                </a>
+              </Button>
             );
           })}
         </div>

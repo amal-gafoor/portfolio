@@ -1,5 +1,5 @@
 import { experience, site } from "@/content/site";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { Card, CardContent } from "@/components/ui/card";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 
@@ -13,9 +13,7 @@ export function Experience() {
           </Reveal>
           {site.about.map((para, i) => (
             <Reveal key={i} delay={0.05 * (i + 1)}>
-              <p className="mb-4 text-[15px] leading-relaxed text-muted md:text-base">
-                {para}
-              </p>
+              <p className="mb-4 text-[15px] leading-relaxed text-muted-foreground md:text-base">{para}</p>
             </Reveal>
           ))}
         </div>
@@ -25,30 +23,30 @@ export function Experience() {
             <SectionTitle kicker="Experience" title="Where I've been" />
           </Reveal>
           <Reveal delay={0.1}>
-            <GlassCard hover={false} spot={false} className="p-6 md:p-8">
-              <ol className="relative border-l border-[var(--glass-border)] pl-6">
-                {experience.map((x) => (
-                  <li key={x.title + x.org} className="mb-8 last:mb-0">
-                    <span className="absolute -left-[5px] mt-1.5 h-[9px] w-[9px] rounded-full bg-fg ring-4 ring-[var(--bg)]" />
-                    <p className="font-mono text-xs text-muted">{x.period}</p>
-                    <h3 className="mt-1 text-lg font-semibold tracking-tight">
-                      {x.title}
-                    </h3>
-                    <p className="text-sm text-muted">{x.org}</p>
-                    {x.points.length > 0 && (
-                      <ul className="mt-3 space-y-1.5 text-sm leading-relaxed text-muted">
-                        {x.points.map((pt) => (
-                          <li key={pt} className="flex gap-2">
-                            <span className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-muted" />
-                            {pt}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                ))}
-              </ol>
-            </GlassCard>
+            <Card>
+              <CardContent className="md:p-8">
+                <ol className="relative border-l border-border pl-6">
+                  {experience.map((x) => (
+                    <li key={x.title + x.org} className="mb-8 last:mb-0">
+                      <span className="absolute -left-[5px] mt-1.5 h-[9px] w-[9px] rounded-full bg-foreground ring-4 ring-background" />
+                      <p className="font-mono text-xs text-muted-foreground">{x.period}</p>
+                      <h3 className="mt-1 text-lg font-semibold tracking-tight">{x.title}</h3>
+                      <p className="text-sm text-muted-foreground">{x.org}</p>
+                      {x.points.length > 0 && (
+                        <ul className="mt-3 space-y-1.5 text-sm leading-relaxed text-muted-foreground">
+                          {x.points.map((pt) => (
+                            <li key={pt} className="flex gap-2">
+                              <span className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-muted-foreground" />
+                              {pt}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </CardContent>
+            </Card>
           </Reveal>
         </div>
       </div>

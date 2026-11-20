@@ -3,6 +3,7 @@
 export const site = {
   name: "Amal Gafoor P K",
   shortName: "Amal",
+  role: "AI Engineer",
   headline: "AI engineer building LLM infrastructure that works in production.",
   tagline:
     "NIT Calicut graduate. One year building RAG pipelines, agentic systems and async backends that don't break under load.",
@@ -11,6 +12,7 @@ export const site = {
     "I build things that actually work in production — RAG pipelines, agentic AI systems, async backends. What excites me is the gap between \"AI demos\" and \"AI that doesn't break under load\": session management, rate limiting, retrieval quality, and the boring infrastructure that makes AI reliable.",
   ],
   email: "amalabdulgafoor9557@gmail.com",
+  phone: "", // add your number here and the chat agent will share it when asked
   location: "Kerala, India",
   links: {
     github: "https://github.com/amal-gafoor",
